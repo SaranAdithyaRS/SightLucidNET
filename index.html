@@ -415,30 +415,28 @@
     const statusIndicator = document.getElementById("status-indicator");
     const statusText = document.getElementById("status-text");
     const stopButton = document.getElementById("stop-button");
-    const countryCodeField = document.getElementById("country-code-field");
-    const methodSelect = document.getElementById("method");
-
-    // Toggle country code field based on method selection
-    methodSelect.addEventListener("change", function() {
-      if (this.value === "WhatsApp") {
-        countryCodeField.classList.remove("hidden");
-      } else {
-        countryCodeField.classList.add("hidden");
+    const emailField = document.getElementById("email");
+  
+    function startDetection() {
+      const email = emailField.value.trim();
+  
+      if (!email) {
+        showNotification("Please enter your email address.", "error");
+        return;
       }
-    });
-
-    document.getElementById("detection-form").addEventListener("submit", function (event) {
-      event.preventDefault();
-      const formData = new FormData(this);
-
-      fetch("/start_detection", {
-        method: "POST",
-        body: formData
+  
+      fetch('https://sightlucid-1.onrender.com/start_detection', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          method: 'Email',
+          contact: email
+        })
       })
-      .then(res => res.json())
+      .then(response => response.json())
       .then(data => {
         if (data.status) {
-          // Update UI for active state
+          // UI for active state
           statusIndicator.classList.remove("status-inactive");
           statusIndicator.classList.add("status-active");
           statusText.textContent = "Detection Active";
@@ -446,24 +444,24 @@
           stopButton.classList.remove("opacity-70", "cursor-not-allowed");
           stopButton.classList.add("bg-red-500", "text-white", "hover:bg-red-600");
           startSound.play();
-          
-          // Show success notification
           showNotification("Detection started successfully!", "success");
         } else {
           showNotification("Failed to start detection. Please try again.", "error");
         }
       })
       .catch(error => {
+        console.error('Start detection error:', error);
         showNotification("Network error. Please check your connection.", "error");
       });
-    });
-
-    stopButton.addEventListener("click", function () {
-      fetch("/stop_detection", { method: "POST" })
-      .then(res => res.json())
+    }
+  
+    function stopDetection() {
+      fetch('https://sightlucid-1.onrender.com/stop_detection', {
+        method: 'POST'
+      })
+      .then(response => response.json())
       .then(data => {
         if (data.status) {
-          // Update UI for inactive state
           statusIndicator.classList.remove("status-active");
           statusIndicator.classList.add("status-inactive");
           statusText.textContent = "Detection Inactive";
@@ -471,18 +469,17 @@
           stopButton.classList.add("opacity-70", "cursor-not-allowed");
           stopButton.classList.remove("bg-red-500", "text-white", "hover:bg-red-600");
           stopButton.classList.add("bg-slate-200", "text-slate-600");
-          
-          // Show success notification
           showNotification("Detection stopped successfully!", "success");
         } else {
           showNotification("Failed to stop detection.", "error");
         }
       })
       .catch(error => {
+        console.error('Stop detection error:', error);
         showNotification("Network error. Please check your connection.", "error");
       });
-    });
-
+    }
+  
     // Function to show notification
     function showNotification(message, type) {
       const notification = document.createElement("div");
@@ -502,8 +499,18 @@
         setTimeout(() => notification.remove(), 300);
       }, 3000);
     }
-
-    // Smooth scrolling for anchor links
+  
+    // Optional test call to backend
+    fetch('https://sightlucid-1.onrender.com/api/endpoint', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data: 'value' })
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('API test error:', error));
+  
+    // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -513,5 +520,6 @@
       });
     });
   </script>
+  
 </body>
 </html>
