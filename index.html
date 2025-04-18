@@ -500,15 +500,7 @@
       }, 3000);
     }
   
-    // Optional test call to backend
-    fetch('https://sightlucid-1.onrender.com/api/endpoint', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ data: 'value' })
-    })
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('API test error:', error));
+   
   
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
