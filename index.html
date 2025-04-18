@@ -258,7 +258,7 @@
             <div class="relative">
               <select id="method" name="method" required class="input-field w-full p-3 rounded-lg appearance-none">
                 <option value="">Select notification method</option>
-                <option value="WhatsApp">WhatsApp Message</option>
+                
                 <option value="Email">Email Notification</option>
               </select>
               <i class="fas fa-chevron-down absolute right-3 top-3.5 text-slate-400 pointer-events-none"></i>
@@ -284,10 +284,10 @@
             </div>
             
             <div class="flex flex-col sm:flex-row gap-4">
-              <button type="submit" class="btn-primary flex-1 py-3 px-6 rounded-lg font-semibold text-white flex items-center justify-center">
+              <button type="button" onclick="startDetection()" class="btn-primary flex-1 py-3 px-6 rounded-lg font-semibold text-white flex items-center justify-center">
                 <i class="fas fa-play mr-2"></i> Start Detection
               </button>
-              <button type="button" id="stop-button" class="bg-slate-200 text-slate-600 flex-1 py-3 px-6 rounded-lg font-semibold opacity-70 cursor-not-allowed flex items-center justify-center" disabled>
+              <button type="button" id="stop-button" onclick="stopDetection()" class="bg-slate-200 text-slate-600 flex-1 py-3 px-6 rounded-lg font-semibold opacity-70 cursor-not-allowed flex items-center justify-center" disabled>
                 <i class="fas fa-stop mr-2"></i> Stop
               </button>
             </div>
